@@ -9,15 +9,16 @@ export class ISBN {
     if (digits[digits.length - 1] === 'X') {
       digits[digits.length-1] = 10;
     }
-    this.digits = digits.map(c => Number(c));
-    
+    this.digits = digits.map(c => Number(c)); 
   }
 
   isValid() {
     if (this.digits[this.digits.length - 1] === NaN || this.digits.length !== 10) {
       return false;
     } else {
-      return this.digits.map((x, i) => (10 - i) * x).reduce((a, b) => a + b, 0) % 11 == 0;
+      return this.digits
+        .map((x, i) => (10 - i) * x)
+        .reduce((a, b) => a + b, 0) % 11 == 0;
     }
   }
 }
