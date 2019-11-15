@@ -28,27 +28,22 @@ export class BinarySearchTree {
   }
 
   insert(data) {
-    let node = this.root;
-    let finished = false;
-    while (!finished) {
-      if (data > node.data) {
-        if (node.right !== null) {
-          node = node.right;
-        }
-        else {
-          node.right = new Node(data);
-          finished = true;
-        }
-      } else {
-        if (node.left !== null) {
-          node = node.left;
-        }
-        else {
-          node.left = new Node(data);
-          finished = true;
-        }
-      }
-    }    
+    this.root = BinarySearchTree.insertRec(data, this.root)
+  }
+
+  static insertRec(data, node) {
+    if (node === null) {
+      node = new Node(data);
+      return node;
+    }
+
+    if (data > node.data) {
+      node.right = BinarySearchTree.insertRec(data, node.right);
+    } else {
+      node.left = BinarySearchTree.insertRec(data, node.left);
+    }
+
+    return node;
   }
 
   each(callback) {
