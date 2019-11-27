@@ -9,32 +9,36 @@ export class List {
   }
 
   append(list) {
-    this.values.push(...list.values);
-    return this;
+    this.values = [...this.values, ...list.values];
+
+    return new List(this.values);
   }
 
   concat(list) {
-    list.values.forEach(element => {
-      this.append(element);
-    });
+    for (let index = 0; index < list.values.length; index++) {
+      this.append(list.values[index])
+    }
 
-    return this;
+    return new List(this.values);
   }
 
-  filter(callBack) {
+  filter(predicate) {
     let result = [];
 
-    this.values.forEach(el => {
-      if (callBack(el)) result.push(el);
-    })
+    for (let i = 0; i < this.values.length; i++) {
+      if (predicate(this.values[i]))
+        result = [...result, this.values[i]];
+    }
 
     return new List(result);
   }
 
-  map(callBack) {
+  map(transform) {
     let result = [];
 
-    this.values.forEach(el => result.push(callBack(el)))
+    for (let i = 0; i < this.values.length; i++) {
+      result[i] = transform(this.values[i]);
+    }
 
     return new List(result);
   }
@@ -43,23 +47,33 @@ export class List {
     return this.values.length;
   }
 
-  foldl(callBack, acc) {
-    this.values.forEach(x => {
-      acc = callBack(acc, x);
-    })
+  foldl(reducer, acc) {
+    for (let i = 0; i < this.values.length; i++) {
+      acc = reducer(acc, this.values[i]);
+    }
 
     return acc;
   }
 
-  foldr(callBack, acc) {
-    this.values.reverse().forEach(x => {
-      acc = callBack(acc, x);
-    })
+  foldr(reducer, acc) {
+    const len = this.length();
+
+    for (let i = 0; i < len; i++) {
+      acc = reducer(acc, this.values[len - i - 1]);
+    }
 
     return acc;
   }
 
   reverse() {
-    return new List(this.values.reverse());
+    let temp = [];
+    const len = this.length();
+
+    for (let i = 0; i < len; i++) {
+      temp[i] = this.values[len - i - 1];
+      
+    }
+
+    return new List(temp);
   }
 }
