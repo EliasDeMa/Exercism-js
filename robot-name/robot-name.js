@@ -1,11 +1,39 @@
 // This is only a SKELETON file for the 'Robot Name' exercise. It's been
 // provided as a convenience to get your started writing code faster.
-const RELEASE_NAMES = new Set();
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-export class Robot { 
-    // static releaseNames = new Set();
+const shuffle = (a) => {
+    let j, x;
 
+    for (let i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+
+    return a;
+}
+
+const generateNames = () => {
+    let names = [];
+
+    for (let letterOne of ALPHABET) {
+        for (let letterTwo of ALPHABET) {
+            for (let i = 0; i < 1000; i++) {
+                let name = letterOne + letterTwo + String(i).padStart(3, '0');
+                names.push(name)
+            }
+        }
+    }
+
+    return shuffle(names);
+}
+
+const ALL_NAMES = generateNames();
+let COUNTER = 0;
+
+export class Robot { 
     constructor() {
         this._name = Robot._constructName();
     }
@@ -19,18 +47,12 @@ export class Robot {
     }
 
     static _constructName() {
-        let name;
-        do {
-            const integer_part = Math.floor((Math.random() * 1000));
-            const letter_part = ALPHABET[Math.floor(Math.random() * 26)] 
-                                + ALPHABET[Math.floor(Math.random() * 26)];
-
-            name = letter_part + String(integer_part).padStart(3, '0');
-        } while (RELEASE_NAMES.has(name))
-        
-        RELEASE_NAMES.add(name);
+        let name = ALL_NAMES[COUNTER];
+        COUNTER += 1;
         return name;
     }
 }
 
-Robot.releaseNames = () => RELEASE_NAMES;
+Robot.releaseNames = () => { 
+    COUNTER = 0; 
+}
